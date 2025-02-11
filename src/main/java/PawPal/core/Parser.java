@@ -60,7 +60,7 @@ class Parser {
             processFindCommand(input);
             break;
         case CHEER:
-            processCheerCommand(input);
+            processCheerCommand();
             break;
         default:
             printer.printInvalidCommand();
@@ -188,7 +188,7 @@ class Parser {
         }
     }
 
-    private void processCheerCommand(String input) {
+    private void processCheerCommand() {
         try {
             String message = taskList.getRandomQuote();
             printer.printCheerMessage(message);
