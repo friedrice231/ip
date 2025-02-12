@@ -10,14 +10,13 @@ import java.time.format.DateTimeParseException;
  */
 public class Event extends Task {
 
+    private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
+
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String rawStart;
     private String rawEnd;
-
-    private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
-
     /**
      * Constructs a new Event task.
      *

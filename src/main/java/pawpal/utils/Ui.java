@@ -7,7 +7,7 @@ import pawpal.tasks.Task;
 
 /**
  * Handles interactions with the user, including displaying messages and reading input.
- * Delegates message printing to the {@link Printer} class.
+ * Delegates message printing to the Printer class.
  */
 public class Ui {
 

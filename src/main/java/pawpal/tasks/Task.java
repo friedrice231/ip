@@ -16,7 +16,7 @@ public class Task {
      */
     public Task(String description) {
         this.description = description;
-        this.isDone = false;  // Tasks are not done by default
+        this.isDone = false; // Tasks are not done by default
     }
 
     /**
