@@ -2,7 +2,7 @@ package pawpal.utils;
 
 import java.util.List;
 
-import pawpal.tasks.*;
+import pawpal.tasks.Task;
 
 /**
  * Handles printing of various messages and task-related outputs to the console.
@@ -135,8 +135,9 @@ public class Printer {
         System.out.println("There was an error saving the file. Please try again.");
     }
 
-    /*
-     * Prints the list of matching tasks
+    /**
+     * Prints the matching tasks that was found.
+     * @param tasks List containing the tasks with the keyword.
      */
     public void printMatchingTasks(List<Task> tasks) {
         System.out.println("____________________________________________________________");
@@ -155,7 +156,7 @@ public class Printer {
         System.out.println(message);
     }
 
-    public String printEmptyCheerFile(){
+    public String printEmptyCheerFile() {
         return "No cheers found! :(";
     }
 
