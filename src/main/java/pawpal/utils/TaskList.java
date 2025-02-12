@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import pawpal.tasks.Task;
 import pawpal.tasks.Deadline;
 import pawpal.tasks.Event;
+import pawpal.tasks.Task;
 import pawpal.tasks.ToDo;
 
 /**
@@ -40,7 +40,6 @@ public class TaskList {
             throw new RuntimeException(e);
         }
         tasks.addAll(loadedTasks);
-//        printer.printTaskList(tasks);
     }
 
     /**
@@ -123,6 +122,11 @@ public class TaskList {
         }
     }
 
+    /**
+     * Finds a task based on the keyword.
+     * @param keyword The specific task the user wants to find.
+     * @return
+     */
     public List<Task> findTasks(String keyword) {
         List<Task> matchingTasks = new ArrayList<>();
         for (Task task : tasks) {
@@ -133,6 +137,11 @@ public class TaskList {
         return matchingTasks;
     }
 
+    /**
+     * Obtains a different line in /cheer.txt
+     * @return returns the cheering text from cheer.txt
+     * @throws IOException if the file is empty or corrupted.
+     */
     public String getRandomQuote() throws IOException {
         String cheerFilePath = "./data/cheer.txt";
         return storage.getRandomQuote(cheerFilePath);

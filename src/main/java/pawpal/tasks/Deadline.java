@@ -25,7 +25,7 @@ public class Deadline extends Task {
         try {
             // Attempt to parse deadline as a date-time string
             this.deadlineDateTime = LocalDateTime.parse(deadline, INPUT_FORMAT);
-            this.rawDeadline = null;  // Clear raw if parsed successfully
+            this.rawDeadline = null;
         } catch (DateTimeParseException e) {
             // If parsing fails, store as raw string
             this.rawDeadline = deadline;

@@ -44,7 +44,7 @@ public class Storage {
         File file = new File(taskFilePath);
 
         if (!file.exists()) {
-            return tasks;  // Return an empty list if the file doesn't exist
+            return tasks; // Return an empty list if the file doesn't exist
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -68,7 +68,7 @@ public class Storage {
      */
     public void saveTasks(List<Task> tasks) throws IOException {
         File file = new File(taskFilePath);
-        file.getParentFile().mkdirs();  // Ensure the directory exists
+        file.getParentFile().mkdirs(); // Ensure the directory exists
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Task task : tasks) {
