@@ -1,4 +1,4 @@
-package PawPal.utils;
+package pawpal.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import PawPal.tasks.Task;
-import PawPal.tasks.Deadline;
-import PawPal.tasks.Event;
-import PawPal.tasks.ToDo;
+import pawpal.tasks.Deadline;
+import pawpal.tasks.Event;
+import pawpal.tasks.Task;
+import pawpal.tasks.ToDo;
 
 /**
  * Handles loading and saving PawPal.core.PawPal.tasks from and to a file.

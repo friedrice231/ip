@@ -1,4 +1,4 @@
-package PawPal.tasks;
+package pawpal.tasks;
 
 /**
  * Represents a task without a specific deadline or time range.

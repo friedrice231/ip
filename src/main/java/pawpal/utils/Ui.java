@@ -1,9 +1,9 @@
-package PawPal.utils;
+package pawpal.utils;
 
 import java.util.List;
 import java.util.Scanner;
 
-import PawPal.tasks.Task;
+import pawpal.tasks.Task;
 
 /**
  * Handles interactions with the user, including displaying messages and reading input.
@@ -26,7 +26,7 @@ public class Ui {
      * Displays a greeting message to the user.
      */
     public void showGreeting() {
-        printer.printGreeting("PawPal");
+        printer.printGreeting("pawpal");
     }
 
     /**

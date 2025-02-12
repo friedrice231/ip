@@ -1,10 +1,10 @@
-package PawPal.core;
+package pawpal.core;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
-import PawPal.tasks.*;
-import PawPal.utils.*;
+import pawpal.tasks.*;
+import pawpal.utils.*;
 
 class PawPalTest {
 

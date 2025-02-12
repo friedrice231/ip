@@ -1,32 +1,20 @@
-package PawPal.core;
+package pawpal.core;
 
 import java.io.IOException;
 
-import PawPal.utils.Ui;
-import PawPal.utils.TaskList;
-import PawPal.utils.Storage;
-
+import pawpal.utils.Storage;
+import pawpal.utils.TaskList;
+import pawpal.utils.Ui;
 /**
  * The main class for the PawPal chatbot application.
  * PawPal allows users to manage tasks such as ToDo, Deadline, and Event tasks.
  * It interacts with the user via the command line.
  */
 public class PawPal {
-
-    /**
-     * The entry point of the PawPal application.
-     *
-     * @param args Command-line arguments (not used).
-     */
-    public static void main(String[] args) {
-        new PawPal().run();
-    }
-
-    private final Parser parser;
+    private final Ui ui;
     private final Storage storage;
     private final TaskList taskList;
-    private final Ui ui;
-
+    private final Parser parser;
     /**
      * Constructs a new PawPal.core.PawPal instance.
      * Initializes the storage, task list, UI, and parser components.
@@ -37,6 +25,14 @@ public class PawPal {
         this.taskList = new TaskList(storage);
         this.ui = new Ui();
         this.parser = new Parser(taskList);
+    }
+    /**
+     * The entry point of the PawPal application.
+     *
+     * @param args Command-line arguments (not used).
+     */
+    public static void main(String[] args) {
+        new PawPal().run();
     }
 
     /**

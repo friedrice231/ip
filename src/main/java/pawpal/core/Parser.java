@@ -1,12 +1,12 @@
-package PawPal.core;
+package pawpal.core;
 
 import java.io.IOException;
 import java.util.List;
 
-import PawPal.tasks.Task;
-import PawPal.utils.Command;
-import PawPal.utils.TaskList;
-import PawPal.utils.Printer;
+import pawpal.tasks.Task;
+import pawpal.utils.Command;
+import pawpal.utils.Printer;
+import pawpal.utils.TaskList;
 
 /**
  * Parses and processes user input for the PawPal chatbot.

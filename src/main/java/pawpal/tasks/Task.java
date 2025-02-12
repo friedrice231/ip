@@ -1,4 +1,4 @@
-package PawPal.tasks;
+package pawpal.tasks;
 
 /**
  * Represents a generic task with a description and completion status.

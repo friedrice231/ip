@@ -1,4 +1,4 @@
-package PawPal.tasks;
+package pawpal.tasks;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,10 +9,10 @@ import java.time.format.DateTimeParseException;
  * Extends the Task class by adding a deadline field.
  */
 public class Deadline extends Task {
-    private LocalDateTime deadlineDateTime;
-    private String rawDeadline;
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
+    private LocalDateTime deadlineDateTime;
+    private String rawDeadline;
 
     /**
      * Constructs a new Deadline task.

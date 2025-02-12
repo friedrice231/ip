@@ -1,13 +1,13 @@
-package PawPal.utils;
+package pawpal.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import PawPal.tasks.Task;
-import PawPal.tasks.Deadline;
-import PawPal.tasks.Event;
-import PawPal.tasks.ToDo;
+import pawpal.tasks.Task;
+import pawpal.tasks.Deadline;
+import pawpal.tasks.Event;
+import pawpal.tasks.ToDo;
 
 /**
  * Manages the task list, including adding, removing, and updating tasks.
