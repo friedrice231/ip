@@ -3,20 +3,21 @@ package pawpal.tasks;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 /**
  * Represents a task that has a specific time range (start and end).
  * Extends the Task class by adding start and end times.
  */
 public class Event extends Task {
-
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
 
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
-    private String rawStart;
-    private String rawEnd;
+    private final String start;
+    private final String end;
+    private final Optional<LocalDateTime> startDateTime;
+    private final Optional<LocalDateTime> endDateTime;
+
     /**
      * Constructs a new Event task.
      *
@@ -26,23 +27,23 @@ public class Event extends Task {
      */
     public Event(String description, String start, String end) {
         super(description);
+        this.start = start;
+        this.end = end;
+        this.startDateTime = parseDateTime(start);
+        this.endDateTime = parseDateTime(end);
+    }
 
-        // Attempt to parse start time
+    /**
+     * Parses the given date-time string into LocalDateTime if possible.
+     *
+     * @param dateTime The input date-time string.
+     * @return An Optional containing the parsed LocalDateTime, or empty if parsing fails.
+     */
+    private Optional<LocalDateTime> parseDateTime(String dateTime) {
         try {
-            this.startDateTime = LocalDateTime.parse(start, INPUT_FORMAT);
-            this.rawStart = null;
+            return Optional.of(LocalDateTime.parse(dateTime, INPUT_FORMAT));
         } catch (DateTimeParseException e) {
-            this.startDateTime = null;
-            this.rawStart = start;
-        }
-
-        // Attempt to parse end time
-        try {
-            this.endDateTime = LocalDateTime.parse(end, INPUT_FORMAT);
-            this.rawEnd = null;
-        } catch (DateTimeParseException e) {
-            this.endDateTime = null;
-            this.rawEnd = end;
+            return Optional.empty();
         }
     }
 
@@ -53,9 +54,13 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        String startStr = (startDateTime != null) ? startDateTime.format(OUTPUT_FORMAT) : rawStart;
-        String endStr = (endDateTime != null) ? endDateTime.format(OUTPUT_FORMAT) : rawEnd;
+        String formattedStart = startDateTime
+                .map(dateTime -> dateTime.format(OUTPUT_FORMAT))
+                .orElse(start);
+        String formattedEnd = endDateTime
+                .map(dateTime -> dateTime.format(OUTPUT_FORMAT))
+                .orElse(end);
 
-        return "[E]" + super.toString() + " from: " + startStr + " to: " + endStr;
+        return "[E]" + super.toString() + " from: " + formattedStart + " to: " + formattedEnd;
     }
 }
