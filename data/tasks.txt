@@ -1,4 +1,7 @@
+[T][ ] run
+[E][ ] eat from: today to: tomorrow
+[T][ ] run
+[T][ ] add
+[T][ ] read book
 [T][ ] buy bread
 [T][ ] run
-[D][ ] run (by: sunday 6pm)
-[T][X] gym

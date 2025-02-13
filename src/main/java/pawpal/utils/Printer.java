@@ -76,4 +76,20 @@ public class Printer {
     public static String printBye() {
         return "Bye! I'll miss you";
     }
+
+    public static String getTodoUsageMessage() {
+        return "Please use the correct format for a ToDo:\n"
+                + "  todo <description>";
+    }
+
+    public static String getDeadlineUsageMessage() {
+        return "Please use the correct format for a Deadline:\n"
+                + "  deadline <description> /by <deadline info>";
+    }
+
+    public static String getEventUsageMessage() {
+        return "Please use the correct format for an Event:\n"
+                + "  event <description> /from <start> /to <end>";
+    }
+
 }

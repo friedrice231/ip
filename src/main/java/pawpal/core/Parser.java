@@ -80,35 +80,61 @@ class Parser {
         }
     }
 
+    /*
+    Checks that the user has used the Todo command correctly
+     */
     private String processToDoCommand(String input) {
-        return taskList.addToDo(input.substring(4).trim());
+        if (input.trim().equalsIgnoreCase("todo") || input.length() <= 4) {
+            return Printer.getTodoUsageMessage();
+        }
+        // Extract description
+        String description = input.substring(4).trim();
+        if (description.isEmpty()) {
+            return Printer.getTodoUsageMessage();
+        }
+        // Add the ToDo if valid
+        return taskList.addToDo(description);
     }
-
+    /*
+    Checks that the user has used the deadline command correctly
+     */
     private String processDeadlineCommand(String input) {
-        String commandBody = input.substring(9).trim();
-        String[] parts = commandBody.split(" /by ", 2);
-
-        if (parts.length != 2) {
-            return Printer.getInvalidCommandMessage();
+        if (input.trim().equalsIgnoreCase("deadline") || input.length() <= 9) {
+            return Printer.getDeadlineUsageMessage();
         }
-
-        String taskDescription = parts[0].trim();
+        // After removing "deadline ", split by " /by "
+        String[] parts = input.substring(9).split(" /by ", 2);
+        if (parts.length < 2) {
+            return Printer.getDeadlineUsageMessage();
+        }
+        String description = parts[0].trim();
         String deadline = parts[1].trim();
-        return taskList.addDeadline(taskDescription, deadline);
-    }
-
-    private String processEventCommand(String input) {
-        String commandBody = input.substring(6).trim();
-        String[] parts = commandBody.split(" /from | /to ", 3);
-
-        if (parts.length != 3) {
-            return Printer.getInvalidCommandMessage();
+        // Ensure both parts are non-empty
+        if (description.isEmpty() || deadline.isEmpty()) {
+            return Printer.getDeadlineUsageMessage();
         }
-
-        String eventDescription = parts[0].trim();
-        String startTime = parts[1].trim();
-        String endTime = parts[2].trim();
-        return taskList.addEvent(eventDescription, startTime, endTime);
+        return taskList.addDeadline(description, deadline);
+    }
+    /*
+    Checks that the user has used the event command correctly
+     */
+    private String processEventCommand(String input) {
+        if (input.trim().equalsIgnoreCase("event") || input.length() <= 6) {
+            return Printer.getEventUsageMessage();
+        }
+        // After removing "event ", split by " /from " and " /to "
+        String[] parts = input.substring(6).split(" /from | /to ", 3);
+        if (parts.length < 3) {
+            return Printer.getEventUsageMessage();
+        }
+        String description = parts[0].trim();
+        String from = parts[1].trim();
+        String to = parts[2].trim();
+        // Ensure no empty pieces
+        if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
+            return Printer.getEventUsageMessage();
+        }
+        return taskList.addEvent(description, from, to);
     }
 
     private String processFindCommand(String input) {

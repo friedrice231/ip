@@ -6,10 +6,20 @@
     -fx-background-repeat: no-repeat;
 }
 
-/* Customize the ScrollPane */
+/* Ensure ScrollPane properly expands */
 #scrollPane {
+    -fx-fit-to-width: true;
+    -fx-vbar-policy: always; /* Always show vertical scrollbar */
     -fx-background-color: transparent;
 }
+
+/* Ensure dialogContainer expands properly */
+#dialogContainer {
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
 
 /* Style the text input */
 #userInput {
@@ -25,12 +35,6 @@
     -fx-background-color: #ff7f50;
     -fx-text-fill: white;
     -fx-border-radius: 5px;
-}
-
-/* Add spacing to the chat messages */
-#dialogContainer {
-    -fx-padding: 10px;
-    -fx-spacing: 5px;
 }
 
 /* Chat bubbles */
