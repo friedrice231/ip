@@ -3,5 +3,3 @@
 [T][ ] run
 [T][ ] add
 [T][ ] read book
-[T][ ] buy bread
-[T][ ] run

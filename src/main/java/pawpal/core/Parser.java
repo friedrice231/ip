@@ -45,7 +45,7 @@ class Parser {
         }
     }
 
-    private Command parseCommand(String input) {
+    Command parseCommand(String input) {
         try {
             return Command.valueOf(input.split(" ")[0].toUpperCase());
         } catch (IllegalArgumentException e) {

@@ -45,6 +45,9 @@ public class TaskList {
      * @return The response message after successfully adding the task.
      */
     public String addToDo(String description) {
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Task description cannot be empty!");
+        }
         Task task = new ToDo(description);
         tasks.add(task);
         return Printer.getTaskAddedMessage(task.toString(), tasks.size());
