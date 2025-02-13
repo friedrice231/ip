@@ -1,0 +1,54 @@
+/* Set background for the entire chat window */
+#mainPane {
+    -fx-background-image: url("/images/background.jpg");
+    -fx-background-size: cover; /* Ensures it covers the whole screen */
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+/* Customize the ScrollPane */
+#scrollPane {
+    -fx-background-color: transparent;
+}
+
+/* Style the text input */
+#userInput {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #aaaaaa;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+/* Style the send button */
+#sendButton {
+    -fx-background-color: #ff7f50;
+    -fx-text-fill: white;
+    -fx-border-radius: 5px;
+}
+
+/* Add spacing to the chat messages */
+#dialogContainer {
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
+}
+
+/* Chat bubbles */
+.chat-bubble {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 10px;
+    -fx-border-radius: 10px;
+    -fx-wrap-text: true;
+}
+
+/* User messages */
+#dialogContainer .chat-bubble {
+    -fx-background-color: #d1e7fd;
+    -fx-text-fill: black;
+}
+
+/* Bot messages */
+.reply-label {
+    -fx-background-color: #ffebcd;
+    -fx-text-fill: black;
+}

@@ -2,6 +2,7 @@ package pawpal.core;
 
 import java.util.Objects;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -56,5 +57,8 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getDukeDialog(response, dukeImage)
         );
         userInput.clear();
+        if (input.equalsIgnoreCase("bye")) {
+            Platform.exit();
+        }
     }
 }

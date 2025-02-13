@@ -38,6 +38,8 @@ class Parser {
             return processFindCommand(input);
         case CHEER:
             return processCheerCommand();
+        case BYE:
+            return processByeCommand();
         default:
             return Printer.getInvalidCommandMessage();
         }
@@ -119,5 +121,9 @@ class Parser {
         } catch (IOException e) {
             return "Error retrieving cheer message.";
         }
+    }
+
+    private String processByeCommand() {
+        return Printer.printBye();
     }
 }

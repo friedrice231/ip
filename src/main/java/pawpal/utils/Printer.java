@@ -73,4 +73,7 @@ public class Printer {
         return "Invalid command!";
     }
 
+    public static String printBye() {
+        return "Bye! I'll miss you";
+    }
 }
