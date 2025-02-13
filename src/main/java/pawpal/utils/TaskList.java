@@ -15,16 +15,14 @@ import pawpal.tasks.ToDo;
 public class TaskList {
 
     private final List<Task> tasks;
-    private final Printer printer;
     private final Storage storage;
 
     /**
      * Constructs a new {@code TaskList} with an empty task list.
-     * Initializes the printer and storage components.
+     * Initializes storage and loads tasks.
      */
     public TaskList(Storage storage) {
         this.tasks = new ArrayList<>();
-        this.printer = new Printer();
         this.storage = storage;
         loadTasksFromStorage();
     }
@@ -33,134 +31,128 @@ public class TaskList {
      * Loads tasks from storage when the application starts.
      */
     private void loadTasksFromStorage() {
-        List<Task> loadedTasks = null;
         try {
-            loadedTasks = storage.loadTasks();
+            tasks.addAll(storage.loadTasks());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error loading tasks.", e);
         }
-        tasks.addAll(loadedTasks);
     }
 
     /**
      * Adds a new ToDo task to the list.
      *
      * @param description The description of the ToDo task.
+     * @return The response message after successfully adding the task.
      */
-    public void addToDo(String description) {
+    public String addToDo(String description) {
         Task task = new ToDo(description);
         tasks.add(task);
-        printer.printTaskAdded(task.toString(), tasks.size());
+        return Printer.getTaskAddedMessage(task.toString(), tasks.size());
     }
 
     /**
      * Adds a new Deadline task to the list.
      *
      * @param description The description of the Deadline task.
-     * @param deadline    The deadline for the task.
+     * @param deadline    The due date and time for the task.
+     * @return The response message after successfully adding the task.
      */
-    public void addDeadline(String description, String deadline) {
+    public String addDeadline(String description, String deadline) {
         Task task = new Deadline(description, deadline);
         tasks.add(task);
-        printer.printTaskAdded(task.toString(), tasks.size());
+        return Printer.getTaskAddedMessage(task.toString(), tasks.size());
     }
 
     /**
      * Adds a new Event task to the list.
      *
      * @param description The description of the Event task.
-     * @param from        The start time of the event.
-     * @param to          The end time of the event.
+     * @param from        The starting time of the event.
+     * @param to          The ending time of the event.
+     * @return The response message after successfully adding the task.
      */
-    public void addEvent(String description, String from, String to) {
+    public String addEvent(String description, String from, String to) {
         Task task = new Event(description, from, to);
         tasks.add(task);
-        printer.printTaskAdded(task.toString(), tasks.size());
+        return Printer.getTaskAddedMessage(task.toString(), tasks.size());
     }
 
     /**
-     * Deletes a task from the list by its index.
+     * Deletes a task from the list based on the task number.
      *
      * @param taskNumber The 1-based index of the task to be deleted.
+     * @return The response message indicating success or failure.
      */
-    public void deleteTask(int taskNumber) {
+    public String deleteTask(int taskNumber) {
         if (taskNumber > 0 && taskNumber <= tasks.size()) {
             Task task = tasks.remove(taskNumber - 1);
-            printer.printTaskDeleted(task, tasks.size());
-        } else {
-            printer.printInvalidTaskNumber();
+            return Printer.getTaskDeletedMessage(task, tasks.size());
         }
+        return Printer.getInvalidTaskNumberMessage();
     }
 
     /**
-     * Marks a task as done by its index.
+     * Marks a task as completed based on the task number.
      *
-     * @param taskNumber The 1-based index of the task to be marked as done.
+     * @param taskNumber The 1-based index of the task to be marked as completed.
+     * @return The response message indicating success or failure.
      */
-    public void markTask(int taskNumber) {
+    public String markTask(int taskNumber) {
         if (taskNumber > 0 && taskNumber <= tasks.size()) {
             Task task = tasks.get(taskNumber - 1);
             task.markAsDone();
-            printer.printTaskMarked(task);
-        } else {
-            printer.printInvalidTaskNumber();
+            return Printer.getTaskMarkedMessage(task);
         }
+        return Printer.getInvalidTaskNumberMessage();
     }
 
     /**
-     * Marks a task as not done by its index.
+     * Marks a task as not completed based on the task number.
      *
-     * @param taskNumber The 1-based index of the task to be marked as not done.
+     * @param taskNumber The 1-based index of the task to be marked as not completed.
+     * @return The response message indicating success or failure.
      */
-    public void unmarkTask(int taskNumber) {
+    public String unmarkTask(int taskNumber) {
         if (taskNumber > 0 && taskNumber <= tasks.size()) {
             Task task = tasks.get(taskNumber - 1);
             task.markAsNotDone();
-            printer.printTaskUnmarked(task);
-        } else {
-            printer.printInvalidTaskNumber();
+            return Printer.getTaskUnmarkedMessage(task);
         }
+        return Printer.getInvalidTaskNumberMessage();
     }
 
     /**
-     * Finds a task based on the keyword.
-     * @param keyword The specific task the user wants to find.
-     * @return
+     * Searches for tasks that contain the given keyword in their description.
+     *
+     * @param keyword The keyword to search for in task descriptions.
+     * @return The response message listing the matching tasks.
      */
-    public List<Task> findTasks(String keyword) {
+    public String findTasks(String keyword) {
         List<Task> matchingTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 matchingTasks.add(task);
             }
         }
-        return matchingTasks;
+        return Printer.getMatchingTasksMessage(matchingTasks);
     }
 
     /**
-     * Obtains a different line in /cheer.txt
-     * @return returns the cheering text from cheer.txt
-     * @throws IOException if the file is empty or corrupted.
+     * Retrieves a random motivational quote from a file.
+     *
+     * @return A randomly selected quote from the stored list.
+     * @throws IOException If an error occurs while reading the file.
      */
     public String getRandomQuote() throws IOException {
-        String cheerFilePath = "./data/cheer.txt";
-        return storage.getRandomQuote(cheerFilePath);
+        return storage.getRandomQuote("./data/cheer.txt");
     }
+
     /**
-     * Returns the list of tasks.
+     * Returns the current list of tasks.
      *
      * @return The list of tasks.
      */
     public List<Task> getTasks() {
         return tasks;
-    }
-
-    /**
-     * Returns the number of tasks in the list.
-     *
-     * @return The number of tasks.
-     */
-    public int getTaskCount() {
-        return tasks.size();
     }
 }
