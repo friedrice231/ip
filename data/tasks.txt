@@ -2,4 +2,3 @@
 [T][ ] run
 [D][ ] run (by: sunday 6pm)
 [T][X] gym
-[T][ ] run
