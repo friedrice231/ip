@@ -16,27 +16,25 @@ import pawpal.tasks.Task;
 import pawpal.tasks.ToDo;
 
 /**
- * Handles loading and saving PawPal.core.PawPal.tasks from and to a file.
+ * Handles loading and saving tasks from and to a file.
  */
 public class Storage {
 
     private final String taskFilePath;
-    private final Printer printer;
 
     /**
      * Constructs a new Storage instance.
      *
-     * @param filePath The path to the file where PawPal.core.PawPal.tasks are stored.
+     * @param filePath The path to the file where tasks are stored.
      */
     public Storage(String filePath) {
         this.taskFilePath = filePath;
-        this.printer = new Printer();
     }
 
     /**
-     * Loads PawPal.core.PawPal.tasks from the file and returns them as a list of PawPal.core.PawPal.tasks.
+     * Loads tasks from the file and returns them as a list.
      *
-     * @return A list of PawPal.core.PawPal.tasks loaded from the file.
+     * @return A list of tasks loaded from the file.
      * @throws IOException If an error occurs while reading the file.
      */
     public List<Task> loadTasks() throws IOException {
@@ -56,14 +54,13 @@ public class Storage {
                 }
             }
         }
-
         return tasks;
     }
 
     /**
-     * Saves the current PawPal.core.PawPal.tasks to the file.
+     * Saves the current list of tasks to the file.
      *
-     * @param tasks The list of PawPal.core.PawPal.tasks to be saved.
+     * @param tasks The list of tasks to be saved.
      * @throws IOException If an error occurs while writing to the file.
      */
     public void saveTasks(List<Task> tasks) throws IOException {
@@ -72,7 +69,8 @@ public class Storage {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Task task : tasks) {
-                writer.write(task.toString() + "\n");
+                writer.write(task.toString());
+                writer.newLine();
             }
         }
     }
@@ -100,10 +98,16 @@ public class Storage {
                 break;
             case "D":
                 String[] deadlineParts = details.split("\\(by: ", 2);
+                if (deadlineParts.length < 2) {
+                    return null;
+                }
                 task = new Deadline(deadlineParts[0].trim(), deadlineParts[1].replace(")", "").trim());
                 break;
             case "E":
                 String[] eventParts = details.split("from: | to: ");
+                if (eventParts.length < 3) {
+                    return null;
+                }
                 task = new Event(eventParts[0].trim(), eventParts[1].trim(), eventParts[2].trim());
                 break;
             default:
@@ -121,14 +125,21 @@ public class Storage {
         }
     }
 
+    /**
+     * Retrieves a random motivational quote from a file.
+     *
+     * @param cheerFilePath The path to the cheer quotes file.
+     * @return A randomly selected quote from the file.
+     * @throws IOException If an error occurs while reading the file.
+     */
     public String getRandomQuote(String cheerFilePath) throws IOException {
-        List<String> quotes = new ArrayList<>();
         File file = new File(cheerFilePath);
 
         if (!file.exists()) {
-            return printer.printFileNotFound();
+            return "File not found!";
         }
 
+        List<String> quotes = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -139,7 +150,7 @@ public class Storage {
         }
 
         if (quotes.isEmpty()) {
-            return printer.printEmptyCheerFile();
+            return "No cheers found!";
         }
 
         Random random = new Random();

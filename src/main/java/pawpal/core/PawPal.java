@@ -5,6 +5,7 @@ import java.io.IOException;
 import pawpal.utils.Storage;
 import pawpal.utils.TaskList;
 import pawpal.utils.Ui;
+
 /**
  * The main class for the PawPal chatbot application.
  * PawPal allows users to manage tasks such as ToDo, Deadline, and Event tasks.
@@ -34,7 +35,18 @@ public class PawPal {
     public static void main(String[] args) {
         new PawPal().run();
     }
-
+    /*
+    Gets the response to reply in the app.
+     */
+    public String getResponse(String input) {
+        try {
+            String response = this.parser.parse(input); // Processes the command
+            storage.saveTasks(taskList.getTasks()); // Save updated tasks after processing
+            return response;
+        } catch (IOException e) {
+            return "An error occurred while saving tasks.";
+        }
+    }
     /**
      * Runs the main loop of the PawPal.core.PawPal chatbot.
      * Continuously reads user input, processes commands, and prints responses.

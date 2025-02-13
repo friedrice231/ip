@@ -7,73 +7,74 @@ import pawpal.tasks.Task;
 
 /**
  * Handles interactions with the user, including displaying messages and reading input.
- * Delegates message printing to the Printer class.
+ * Delegates message generation to the Printer class.
  */
 public class Ui {
 
     private final Scanner scanner;
-    private final Printer printer;
 
     /**
      * Constructs a new {@code Ui} instance.
      */
     public Ui() {
         scanner = new Scanner(System.in);
-        printer = new Printer();
     }
 
     /**
      * Displays a greeting message to the user.
      */
     public void showGreeting() {
-        printer.printGreeting("pawpal");
+        System.out.println(Printer.getGreetingMessage("PawPal"));
     }
 
     /**
      * Displays a farewell message to the user.
      */
     public void showBye() {
-        printer.printBye();
+        System.out.println(Printer.getByeMessage());
     }
 
     /**
-     * Displays an error message when loading PawPal.core.PawPal.tasks fails.
+     * Displays an error message when loading tasks fails.
      */
     public void showLoadingError() {
-        printer.printLoadingErrorMessage();
-    }
-
-    public void showSavingError() {
-        printer.printSavingErrorMessage();
+        System.out.println(Printer.getLoadingErrorMessage());
     }
 
     /**
-     * Displays a list of PawPal.core.PawPal.tasks to the user.
+     * Displays an error message when saving tasks fails.
+     */
+    public void showSavingError() {
+        System.out.println(Printer.getSavingErrorMessage());
+    }
+
+    /**
+     * Displays the list of tasks to the user.
      *
-     * @param tasks The list of PawPal.core.PawPal.tasks to display.
+     * @param tasks The list of tasks to display.
      */
     public void showTaskList(List<Task> tasks) {
-        printer.printTaskList(tasks);
+        System.out.println(Printer.getTaskListString(tasks));
     }
 
     /**
      * Displays a message when a task is added to the list.
      *
      * @param task      The task that was added.
-     * @param taskCount The current number of PawPal.core.PawPal.tasks in the list.
+     * @param taskCount The current number of tasks in the list.
      */
     public void showTaskAdded(Task task, int taskCount) {
-        printer.printTaskAdded(task.getDescription(), taskCount);
+        System.out.println(Printer.getTaskAddedMessage(task.toString(), taskCount));
     }
 
     /**
      * Displays a message when a task is deleted from the list.
      *
      * @param task      The task that was deleted.
-     * @param taskCount The current number of PawPal.core.PawPal.tasks remaining in the list.
+     * @param taskCount The current number of tasks remaining in the list.
      */
     public void showTaskDeleted(Task task, int taskCount) {
-        printer.printTaskDeleted(task, taskCount);
+        System.out.println(Printer.getTaskDeletedMessage(task, taskCount));
     }
 
     /**
@@ -82,7 +83,7 @@ public class Ui {
      * @param task The task that was marked.
      */
     public void showTaskMarked(Task task) {
-        printer.printTaskMarked(task);
+        System.out.println(Printer.getTaskMarkedMessage(task));
     }
 
     /**
@@ -91,27 +92,27 @@ public class Ui {
      * @param task The task that was unmarked.
      */
     public void showTaskUnmarked(Task task) {
-        printer.printTaskUnmarked(task);
+        System.out.println(Printer.getTaskUnmarkedMessage(task));
     }
 
     /**
      * Displays an error message when the user enters an invalid task number.
      */
     public void showInvalidTaskNumber() {
-        printer.printInvalidTaskNumber();
+        System.out.println(Printer.getInvalidTaskNumberMessage());
     }
 
     /**
      * Displays an error message when the user enters an invalid command.
      */
     public void showInvalidCommand() {
-        printer.printInvalidCommand();
+        System.out.println(Printer.getInvalidCommandMessage());
     }
 
     /**
      * Reads the next line of input from the user.
      *
-     * @return The user input as a string.
+     * @return The user input as a trimmed string.
      */
     public String readCommand() {
         return scanner.nextLine().trim();

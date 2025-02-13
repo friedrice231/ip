@@ -1,199 +1,123 @@
 package pawpal.core;
 
 import java.io.IOException;
-import java.util.List;
 
-import pawpal.tasks.Task;
 import pawpal.utils.Command;
 import pawpal.utils.Printer;
 import pawpal.utils.TaskList;
 
 /**
- * Parses and processes user input for the PawPal chatbot.
- * Determines the command type and delegates actions to the TaskList.
+ * Parses and processes user input for PawPal.
  */
 class Parser {
 
     private final TaskList taskList;
-    private final Printer printer;
 
-    /**
-     * Constructs a new Parser instance.
-     *
-     * @param taskList The TaskList responsible for managing PawPal.tasks.
-     */
     public Parser(TaskList taskList) {
         this.taskList = taskList;
-        this.printer = new Printer();
     }
 
-    /**
-     * Parses the user input and assigns it to the appropriate task manager method.
-     *
-     * @param input The user input string.
-     */
-    public void parse(String input) {
+    public String parse(String input) {
         Command command = parseCommand(input);
         switch (command) {
         case LIST:
-            processListCommand();
-            break;
+            return Printer.getTaskListString(taskList.getTasks());
         case MARK:
-            processMarkCommand(input, true);
-            break;
+            return processMarkCommand(input, true);
         case UNMARK:
-            processMarkCommand(input, false);
-            break;
+            return processMarkCommand(input, false);
         case TODO:
-            processToDoCommand(input);
-            break;
+            return processToDoCommand(input);
         case DEADLINE:
-            processDeadlineCommand(input);
-            break;
+            return processDeadlineCommand(input);
         case EVENT:
-            processEventCommand(input);
-            break;
+            return processEventCommand(input);
         case DELETE:
-            processDeleteCommand(input);
-            break;
+            return processDeleteCommand(input);
         case FIND:
-            processFindCommand(input);
-            break;
+            return processFindCommand(input);
         case CHEER:
-            processCheerCommand();
-            break;
+            return processCheerCommand();
         default:
-            printer.printInvalidCommand();
-            break;
+            return Printer.getInvalidCommandMessage();
         }
     }
 
-    private void processListCommand() {
-        printer.printTaskList(taskList.getTasks());
-    }
-
-    /**
-     * Determines the command type from the user input.
-     *
-     * @param input The user input string.
-     * @return The corresponding Command enum value.
-     */
-    Command parseCommand(String input) {
-        String commandWord = input.split(" ")[0].toUpperCase();
+    private Command parseCommand(String input) {
         try {
-            return Command.valueOf(commandWord);
+            return Command.valueOf(input.split(" ")[0].toUpperCase());
         } catch (IllegalArgumentException e) {
             return Command.INVALID;
         }
     }
 
-    /**
-     * Processes the "mark" or "unmark" command.
-     *
-     * @param input The user input string.
-     * @param mark  true if the command is "mark", false if it is "unmark".
-     */
-    private void processMarkCommand(String input, boolean mark) {
+    // Helper to parse task number from input
+    private int parseTaskNumber(String input) {
+        String[] parts = input.split(" ");
+        if (parts.length < 2) {
+            throw new IllegalArgumentException();
+        }
+        return Integer.parseInt(parts[1].trim());
+    }
+
+    private String processMarkCommand(String input, boolean mark) {
         try {
-            String[] parts = input.split(" ", 2);
-            if (parts.length < 2) {
-                throw new NumberFormatException();
-            }
-            int taskNumber = Integer.parseInt(parts[1].trim());
-            if (mark) {
-                taskList.markTask(taskNumber);
-            } else {
-                taskList.unmarkTask(taskNumber);
-            }
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            printer.printInvalidTaskNumber();
+            int taskNumber = Integer.parseInt(input.split(" ")[1].trim());
+            return mark ? taskList.markTask(taskNumber) : taskList.unmarkTask(taskNumber);
+        } catch (Exception e) {
+            return Printer.getInvalidTaskNumberMessage();
         }
     }
 
-    /**
-     * Processes the "delete" command.
-     *
-     * @param input The user input string.
-     */
-    private void processDeleteCommand(String input) {
+    private String processDeleteCommand(String input) {
         try {
-            String[] parts = input.split(" ", 2);
-            if (parts.length < 2) {
-                throw new NumberFormatException();
-            }
-            int taskNumber = Integer.parseInt(parts[1].trim());
-            taskList.deleteTask(taskNumber);
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            printer.printInvalidTaskNumber();
+            int taskNumber = Integer.parseInt(input.split(" ")[1].trim());
+            return taskList.deleteTask(taskNumber);
+        } catch (Exception e) {
+            return Printer.getInvalidTaskNumberMessage();
         }
     }
 
-    /**
-     * Processes the "todo" command to add a ToDo task.
-     *
-     * @param input The user input string.
-     */
-    private void processToDoCommand(String input) {
-        String description = input.substring(4).trim();
-        if (description.isEmpty()) {
-            printer.printMissingToDoDetails();
-        } else {
-            taskList.addToDo(description);
-        }
+    private String processToDoCommand(String input) {
+        return taskList.addToDo(input.substring(4).trim());
     }
 
-    /**
-     * Processes the "deadline" command to add a Deadline task.
-     *
-     * @param input The user input string.
-     */
-    private void processDeadlineCommand(String input) {
-        if (input.trim().equalsIgnoreCase("deadline")) {
-            printer.printMissingDeadlineDetails();
-            return;
+    private String processDeadlineCommand(String input) {
+        String commandBody = input.substring(9).trim();
+        String[] parts = commandBody.split(" /by ", 2);
+
+        if (parts.length != 2) {
+            return Printer.getInvalidCommandMessage();
         }
-        String[] parts = input.substring(9).split(" /by ", 2);
-        if (parts.length == 2) {
-            taskList.addDeadline(parts[0].trim(), parts[1].trim());
-        } else {
-            printer.printMissingDeadlineDetails();
-        }
+
+        String taskDescription = parts[0].trim();
+        String deadline = parts[1].trim();
+        return taskList.addDeadline(taskDescription, deadline);
     }
 
-    /**
-     * Processes the "event" command to add an Event task.
-     *
-     * @param input The user input string.
-     */
-    private void processEventCommand(String input) {
-        if (input.trim().equalsIgnoreCase("event")) {
-            printer.printMissingEventDetails();
-            return;
+    private String processEventCommand(String input) {
+        String commandBody = input.substring(6).trim();
+        String[] parts = commandBody.split(" /from | /to ", 3);
+
+        if (parts.length != 3) {
+            return Printer.getInvalidCommandMessage();
         }
-        String[] parts = input.substring(6).split(" /from | /to ", 3);
-        if (parts.length == 3) {
-            taskList.addEvent(parts[0].trim(), parts[1].trim(), parts[2].trim());
-        } else {
-            printer.printMissingEventDetails();
-        }
+
+        String eventDescription = parts[0].trim();
+        String startTime = parts[1].trim();
+        String endTime = parts[2].trim();
+        return taskList.addEvent(eventDescription, startTime, endTime);
     }
 
-    private void processFindCommand(String input) {
-        String keyword = input.substring(4).trim();
-        if (keyword.isEmpty()) {
-            printer.printMissingToDoDetails();
-        } else {
-            List<Task> matchingTasks = taskList.findTasks(keyword);
-            printer.printMatchingTasks(matchingTasks);
-        }
+    private String processFindCommand(String input) {
+        return taskList.findTasks(input.substring(4).trim());
     }
 
-    private void processCheerCommand() {
+    private String processCheerCommand() {
         try {
-            String message = taskList.getRandomQuote();
-            printer.printCheerMessage(message);
+            return taskList.getRandomQuote();
         } catch (IOException e) {
-            printer.printInvalidCommand();
+            return "Error retrieving cheer message.";
         }
     }
 }
