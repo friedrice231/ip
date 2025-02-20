@@ -1,5 +1,3 @@
-[T][ ] run
-[E][ ] eat from: today to: tomorrow
-[T][ ] run
+[T][X] run
 [T][ ] add
 [T][ ] read book
