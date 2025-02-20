@@ -31,6 +31,9 @@ public class Event extends Task {
         this.end = end;
         this.startDateTime = parseDateTime(start);
         this.endDateTime = parseDateTime(end);
+
+        assert startDateTime.isEmpty() || endDateTime.isEmpty() || !startDateTime.get().isAfter(endDateTime.get())
+                : "Event start date/time should not be after end date/time";
     }
 
     /**
