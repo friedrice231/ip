@@ -3,6 +3,7 @@ package pawpal.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pawpal.tasks.Deadline;
 import pawpal.tasks.Event;
@@ -131,14 +132,13 @@ public class TaskList {
      * @return The response message listing the matching tasks.
      */
     public String findTasks(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                matchingTasks.add(task);
-            }
-        }
+        List<Task> matchingTasks = tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+
         return Printer.getMatchingTasksMessage(matchingTasks);
     }
+
 
     /**
      * Retrieves a random motivational quote from a file.
