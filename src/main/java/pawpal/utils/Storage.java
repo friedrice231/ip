@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import pawpal.tasks.Deadline;
@@ -48,10 +49,8 @@ public class Storage {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Task task = parseTask(line);
-                if (task != null) {
-                    tasks.add(task);
-                }
+                Optional<Task> maybeTask = parseTask(line);
+                maybeTask.ifPresent(tasks::add);
             }
         }
         return tasks;
@@ -81,37 +80,41 @@ public class Storage {
      * @param line The line representing a task in the saved file.
      * @return The parsed task object, or null if the line is malformed.
      */
-    private Task parseTask(String line) {
-        // Guard clause: blank line
+    private Optional<Task> parseTask(String line) {
+        // Guard clause: blank line or null
         if (line == null || line.isBlank()) {
-            return null;
+            return Optional.empty();
         }
 
-        // Task type is in position [1,2], and isDone at [4], then details at [7..]
-        // Validate line length to avoid IndexOutOfBounds
+        // Validate length to avoid IndexOutOfBounds
         if (line.length() < 7) {
             System.out.println("Skipping malformed (too short) task line: " + line);
-            return null;
+            return Optional.empty();
         }
 
         String taskType = line.substring(1, 2);
-        boolean isDone = line.charAt(4) == 'X';
+        boolean isDone = (line.charAt(4) == 'X');
         String details = line.substring(7).trim();
 
-        // Use a helper method or direct parse:
-        Task task = createTaskFromType(taskType, details);
-        if (task == null) {
+        // 1) Get Optional<Task> from helper
+        Optional<Task> maybeTask = createTaskFromType(taskType, details);
+
+        // 2) If empty, skip
+        if (maybeTask.isEmpty()) {
             System.out.println("Skipping malformed (invalid format) task line: " + line);
-            return null;
+            return Optional.empty();
         }
 
+        // 3) Extract the Task and mark if done
+        Task task = maybeTask.get();
         if (isDone) {
             task.markAsDone();
         }
-        return task;
+
+        return Optional.of(task);
     }
 
-    private Task createTaskFromType(String taskType, String details) {
+    private Optional<Task> createTaskFromType(String taskType, String details) {
         switch (taskType) {
         case "T":
             return parseToDo(details);
@@ -120,33 +123,35 @@ public class Storage {
         case "E":
             return parseEvent(details);
         default:
-            return null; // unrecognized type
+            return Optional.empty();
         }
     }
 
-    private ToDo parseToDo(String details) {
-        return new ToDo(details);
+    private Optional<Task> parseToDo(String details) {
+        // If you want to guard for empty details, do so here
+        return Optional.of(new ToDo(details));
     }
 
-    private Deadline parseDeadline(String details) {
+    private Optional<Task> parseDeadline(String details) {
         // e.g., "Some desc (by: 12/12/2024 1800)"
         String[] parts = details.split("\\(by: ", 2);
         if (parts.length < 2) {
-            return null;
+            return Optional.empty();
         }
         String desc = parts[0].trim();
         String deadlineStr = parts[1].replace(")", "").trim();
-        return new Deadline(desc, deadlineStr);
+        return Optional.of(new Deadline(desc, deadlineStr));
     }
 
-    private Event parseEvent(String details) {
+    private Optional<Task> parseEvent(String details) {
         // e.g. "Meeting from: 12/12/2024 1800 to: 12/12/2024 2000"
         String[] parts = details.split("from: | to: ");
         if (parts.length < 3) {
-            return null;
+            return Optional.empty();
         }
-        return new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
+        return Optional.of(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
     }
+
 
 
     /**
