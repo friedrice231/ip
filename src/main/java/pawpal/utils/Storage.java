@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import pawpal.tasks.Deadline;
@@ -48,10 +49,8 @@ public class Storage {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Task task = parseTask(line);
-                if (task != null) {
-                    tasks.add(task);
-                }
+                Optional<Task> maybeTask = parseTask(line);
+                maybeTask.ifPresent(tasks::add);
             }
         }
         return tasks;
@@ -81,49 +80,79 @@ public class Storage {
      * @param line The line representing a task in the saved file.
      * @return The parsed task object, or null if the line is malformed.
      */
-    private Task parseTask(String line) {
-        try {
-            if (line.isBlank()) {
-                return null;
-            }
+    private Optional<Task> parseTask(String line) {
+        // Guard clause: blank line or null
+        if (line == null || line.isBlank()) {
+            return Optional.empty();
+        }
 
-            String taskType = line.substring(1, 2);
-            boolean isDone = line.charAt(4) == 'X';
-            String details = line.substring(7).trim();
+        // Validate length to avoid IndexOutOfBounds
+        if (line.length() < 7) {
+            System.out.println("Skipping malformed (too short) task line: " + line);
+            return Optional.empty();
+        }
 
-            Task task;
-            switch (taskType) {
-            case "T":
-                task = new ToDo(details);
-                break;
-            case "D":
-                String[] deadlineParts = details.split("\\(by: ", 2);
-                if (deadlineParts.length < 2) {
-                    return null;
-                }
-                task = new Deadline(deadlineParts[0].trim(), deadlineParts[1].replace(")", "").trim());
-                break;
-            case "E":
-                String[] eventParts = details.split("from: | to: ");
-                if (eventParts.length < 3) {
-                    return null;
-                }
-                task = new Event(eventParts[0].trim(), eventParts[1].trim(), eventParts[2].trim());
-                break;
-            default:
-                return null;
-            }
+        String taskType = line.substring(1, 2);
+        boolean isDone = (line.charAt(4) == 'X');
+        String details = line.substring(7).trim();
 
-            if (isDone) {
-                task.markAsDone();
-            }
-            return task;
+        // 1) Get Optional<Task> from helper
+        Optional<Task> maybeTask = createTaskFromType(taskType, details);
 
-        } catch (Exception e) {
-            System.out.println("Skipping malformed task line: " + line);
-            return null;
+        // 2) If empty, skip
+        if (maybeTask.isEmpty()) {
+            System.out.println("Skipping malformed (invalid format) task line: " + line);
+            return Optional.empty();
+        }
+
+        // 3) Extract the Task and mark if done
+        Task task = maybeTask.get();
+        if (isDone) {
+            task.markAsDone();
+        }
+
+        return Optional.of(task);
+    }
+
+    private Optional<Task> createTaskFromType(String taskType, String details) {
+        switch (taskType) {
+        case "T":
+            return parseToDo(details);
+        case "D":
+            return parseDeadline(details);
+        case "E":
+            return parseEvent(details);
+        default:
+            return Optional.empty();
         }
     }
+
+    private Optional<Task> parseToDo(String details) {
+        // If you want to guard for empty details, do so here
+        return Optional.of(new ToDo(details));
+    }
+
+    private Optional<Task> parseDeadline(String details) {
+        // e.g., "Some desc (by: 12/12/2024 1800)"
+        String[] parts = details.split("\\(by: ", 2);
+        if (parts.length < 2) {
+            return Optional.empty();
+        }
+        String desc = parts[0].trim();
+        String deadlineStr = parts[1].replace(")", "").trim();
+        return Optional.of(new Deadline(desc, deadlineStr));
+    }
+
+    private Optional<Task> parseEvent(String details) {
+        // e.g. "Meeting from: 12/12/2024 1800 to: 12/12/2024 2000"
+        String[] parts = details.split("from: | to: ");
+        if (parts.length < 3) {
+            return Optional.empty();
+        }
+        return Optional.of(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
+    }
+
+
 
     /**
      * Retrieves a random motivational quote from a file.
