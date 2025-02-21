@@ -1,7 +1,10 @@
 package pawpal.utils;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -157,5 +160,15 @@ public class TaskList {
      */
     public List<Task> getTasks() {
         return tasks;
+    }
+
+    /**
+     * Sorts the tasks in the following order:
+     * 1. ToDo tasks first
+     * 2. Deadline tasks sorted by the nearest deadline
+     * 3. Event tasks sorted by the earliest start time
+     */
+    public void sortTasks() {
+        Collections.sort(tasks);
     }
 }

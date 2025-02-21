@@ -40,6 +40,8 @@ class Parser {
             return processCheerCommand();
         case BYE:
             return processByeCommand();
+        case SORT:
+            return processSortCommand();
         default:
             return Printer.getInvalidCommandMessage();
         }
@@ -147,6 +149,11 @@ class Parser {
         } catch (IOException e) {
             return "Error retrieving cheer message.";
         }
+    }
+
+    private String processSortCommand() {
+        taskList.sortTasks();
+        return Printer.getTaskListString(taskList.getTasks());
     }
 
     private String processByeCommand() {
