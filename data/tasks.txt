@@ -1,3 +1,6 @@
 [T][X] run
+[T][ ] read
+[T][ ] eat
+[T][ ] eat lunch
 [D][ ] test (by: tomorrow)
 [E][ ] test from: today to: tomorrow

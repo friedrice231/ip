@@ -66,4 +66,11 @@ public class MainWindow extends AnchorPane {
             delay.play();
         }
     }
+    public void setBackground(String imagePath) {
+        this.getScene().lookup("#mainPane")
+                .setStyle("-fx-background-image: url('" + imagePath + "'); "
+                        + "-fx-background-size: cover; "
+                        + "-fx-background-position: center; "
+                        + "-fx-background-repeat: no-repeat;");
+    }
 }
