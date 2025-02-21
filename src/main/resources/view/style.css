@@ -1,58 +1,74 @@
+/* Base chat bubble styling */
+.chat-bubble {
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 3);
+    -fx-padding: 10px 15px;
+    -fx-background-insets: 5px;
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+/* User bubble styling */
+.user-label {
+    -fx-background-color: #d1e7fd;
+    -fx-text-fill: #333333;
+}
+
+/* PawPal bubble styling */
+.reply-label {
+    -fx-background-color: #ffebcd;
+    -fx-text-fill: #333333;
+}
+
+/* Send button styling */
+#sendButton {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+#sendButton:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Text field styling */
+#userInput {
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #999999;
+}
+
+/* Message container spacing */
+.dialog-container {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+/* Circular avatar styling */
+.image-view {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 25px;
+}
+
 /* Set background for the entire chat window */
 #mainPane {
     -fx-background-image: url("/images/background.jpg");
-    -fx-background-size: cover; /* Ensures it covers the whole screen */
+    -fx-background-size: cover; /* Ensures the image covers the full area */
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
 
-/* Ensure ScrollPane properly expands */
-#scrollPane {
-    -fx-fit-to-width: true;
-    -fx-vbar-policy: always; /* Always show vertical scrollbar */
-    -fx-background-color: transparent;
-}
-
-/* Ensure dialogContainer expands properly */
+/* Style the dialog container */
 #dialogContainer {
+    -fx-background-color: transparent; /* Removes default background color */
     -fx-padding: 10px;
     -fx-spacing: 5px;
-    -fx-background-color: rgba(255, 255, 255, 0.8);
-}
-
-
-/* Style the text input */
-#userInput {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #aaaaaa;
-    -fx-border-radius: 5px;
-    -fx-padding: 5px;
-    -fx-font-size: 14px;
-}
-
-/* Style the send button */
-#sendButton {
-    -fx-background-color: #ff7f50;
-    -fx-text-fill: white;
-    -fx-border-radius: 5px;
-}
-
-/* Chat bubbles */
-.chat-bubble {
-    -fx-background-color: #f0f0f0;
-    -fx-padding: 10px;
-    -fx-border-radius: 10px;
-    -fx-wrap-text: true;
-}
-
-/* User messages */
-#dialogContainer .chat-bubble {
-    -fx-background-color: #d1e7fd;
-    -fx-text-fill: black;
-}
-
-/* Bot messages */
-.reply-label {
-    -fx-background-color: #ffebcd;
-    -fx-text-fill: black;
 }

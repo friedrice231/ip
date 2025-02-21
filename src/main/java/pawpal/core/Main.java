@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
- * A GUI for Duke using FXML.
+ * A GUI for PawPal using FXML.
  */
 public class Main extends Application {
 
@@ -21,20 +21,28 @@ public class Main extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
-            Image icon =
-                    new Image(String.valueOf(Objects.requireNonNull(Main.class.getResource("/images/cat-icon.png"))));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
-            stage.setScene(scene);
-            stage.setScene(scene);
-            stage.setMinHeight(220);
-            stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setPawPal(pawpal); // inject the Duke instance
+
+            // Load CSS for styling (including the background)
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/view/style.css"))
+                    .toExternalForm());
+
+            // Set window icon
+            Image icon = new Image(Objects.requireNonNull(Main.class.getResourceAsStream("/images/cat-icon.png")));
             stage.getIcons().add(icon);
-            stage.setTitle("PawPal");
+
+            // Set window title
+            stage.setTitle("PawPal Chat Assistant");
+
+            // Set scene and show window
+            stage.setScene(scene);
+            stage.setMinHeight(600);
+            stage.setMinWidth(400);
+            fxmlLoader.<MainWindow>getController().setPawPal(pawpal);
             stage.show();
         } catch (IOException e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -2,6 +2,7 @@ package pawpal.core;
 
 import java.util.Objects;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import pawpal.utils.Printer;
 
 /**
@@ -29,7 +31,7 @@ public class MainWindow extends AnchorPane {
 
     private final Image userImage = new Image(Objects
             .requireNonNull(this.getClass().getResourceAsStream("/images/cat-right.png")));
-    private final Image dukeImage = new Image(Objects
+    private final Image pawpalImage = new Image(Objects
             .requireNonNull(this.getClass().getResourceAsStream("/images/cat-left.png")));
 
     @FXML
@@ -37,16 +39,15 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /** Injects the PawPal instance */
     public void setPawPal(PawPal p) {
         pawpal = p;
         String greeting = Printer.getGreetingMessage("PawPal");
-        dialogContainer.getChildren().add(DialogBox.getDukeDialog(greeting, dukeImage));
+        dialogContainer.getChildren().add(DialogBox.getPawPalDialog(greeting, pawpalImage));
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Handles user input by displaying it and generating a response.
      */
     @FXML
     private void handleUserInput() {
@@ -54,11 +55,15 @@ public class MainWindow extends AnchorPane {
         String response = pawpal.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getPawPalDialog(response, pawpalImage)
         );
         userInput.clear();
+
+        // Exit the application when "bye" is typed
         if (input.equalsIgnoreCase("bye")) {
-            Platform.exit();
+            PauseTransition delay = new PauseTransition(Duration.seconds(1));
+            delay.setOnFinished(event -> Platform.exit());
+            delay.play();
         }
     }
 }
