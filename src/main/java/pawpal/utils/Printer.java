@@ -11,43 +11,45 @@ public class Printer {
 
     // Added methods for greeting, bye, and error messages
     public static String getGreetingMessage(String appName) {
-        return "Hello from " + appName + "!\nWhat can I do for you?";
+        return "Meow there! Welcome to " + appName + "!\nHow can I help you pounce on your tasks today?";
     }
 
     public static String getByeMessage() {
-        return "Goodbye! Hope to see you again soon!";
+        return "Farewell, human! May your naps be long and your adventures many! Meow!";
     }
 
     public static String getLoadingErrorMessage() {
-        return "Error loading tasks from file.";
+        return "Oops! I tripped over a yarn ball while loading tasks from file.";
     }
 
     public static String getSavingErrorMessage() {
-        return "Error saving tasks to file.";
+        return "Uh-oh! A sneaky cat toy got in the way while saving tasks to file.";
     }
 
     // Existing task-related messages
     public static String getTaskAddedMessage(String description, int taskCount) {
-        return "Task added: " + description + "\nNow you have " + taskCount + " tasks.";
+        return "Purrfect! I've added the task: " + description
+                + "\nNow you have " + taskCount + " tasks to chase.";
     }
 
     public static String getTaskDeletedMessage(Task task, int taskCount) {
-        return "Task removed: " + task + "\nNow you have " + taskCount + " tasks left.";
+        return "I've swiped away the task: " + task
+                + "\nNow there are " + taskCount + " tasks remaining in your kitty checklist.";
     }
 
     public static String getTaskMarkedMessage(Task task) {
-        return "Task marked as done:\n" + task;
+        return "That task is now purr-fectly completed:\n" + task;
     }
 
     public static String getTaskUnmarkedMessage(Task task) {
-        return "Task marked as not done:\n" + task;
+        return "Even the best cats need a second try. Task reset to not done:\n" + task;
     }
 
     public static String getTaskListString(List<Task> tasks) {
         if (tasks.isEmpty()) {
-            return "No tasks in your list!";
+            return "Your task list is as empty as a food bowl before dinner!";
         }
-        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
+        StringBuilder sb = new StringBuilder("Here are your tasks, ready for a purr-fect day:\n");
         for (int i = 0; i < tasks.size(); i++) {
             sb.append((i + 1)).append(". ").append(tasks.get(i)).append("\n");
         }
@@ -56,9 +58,9 @@ public class Printer {
 
     public static String getMatchingTasksMessage(List<Task> tasks) {
         if (tasks.isEmpty()) {
-            return "No matching tasks found.";
+            return "No matching tasks found. Did the cat hide them?";
         }
-        StringBuilder sb = new StringBuilder("Matching tasks:\n");
+        StringBuilder sb = new StringBuilder("Here are your matching tasks:\n");
         for (int i = 0; i < tasks.size(); i++) {
             sb.append((i + 1)).append(". ").append(tasks.get(i)).append("\n");
         }
@@ -66,30 +68,36 @@ public class Printer {
     }
 
     public static String getInvalidTaskNumberMessage() {
-        return "Invalid task number!";
+        return "Invalid task number! Did you mistake a shadow for a task?";
     }
 
     public static String getInvalidCommandMessage() {
-        return "Invalid command!";
+        return "Hiss! I don't understand that command. Please try a valid one.";
     }
 
     public static String printBye() {
-        return "Bye! I'll miss you";
+        return "Bye! I'll be purring until we meet again.";
     }
 
     public static String getTodoUsageMessage() {
-        return "Please use the correct format for a ToDo:\n"
-                + "  todo <description>";
+        return """
+                To create a ToDo, use the format:
+                  todo <description>
+                Don't leave out the purr-scription!""";
     }
 
     public static String getDeadlineUsageMessage() {
-        return "Please use the correct format for a Deadline:\n"
-                + "  deadline <description> /by <deadline info>";
+        return """
+                For a Deadline, please use the format:
+                  deadline <description> /by <deadline info>
+                Don't let your tasks slip through your paws!""";
     }
 
     public static String getEventUsageMessage() {
-        return "Please use the correct format for an Event:\n"
-                + "  event <description> /from <start> /to <end>";
+        return """
+                For an Event, please use the format:
+                  event <description> /from <start> /to <end>
+                Time to mark your calendars and chase the fun!""";
     }
 
 }
